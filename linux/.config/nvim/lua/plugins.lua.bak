@@ -1,0 +1,302 @@
+-- ~/.config/nvim/lua/plugins.lua
+
+-- ~/.config/nvim/lua/plugins.lua
+local plugins = {
+  -- 主题
+  {
+    "sainnhe/everforest",
+    lazy    = false,
+    priority= 1000,
+    config = function()
+      vim.g.everforest_enable_italic = true
+      vim.cmd.colorscheme("everforest")
+    end,
+  },
+
+  -- 文件树 Neo-Tree
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   branch = "v3.x",
+  --   -- 确保 everforest 先加载
+  --   after = "everforest",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-tree/nvim-web-devicons",
+  --     "MunifTanjim/nui.nvim",
+  --   },
+  --   -- 只有在打开文件树时才加载
+  --   cmd = { "Neotree", "NeoTreeToggle", "NeoTreeFocus" },
+  --   keys = {
+  --     { "<leader>e", "<cmd>Neotree toggle<CR>", desc = "Toggle Neo-Tree" },
+  --   },
+  --   config = function()
+  --     -- 1) 基本设置
+  --     require("neo-tree").setup({
+  --       window = {
+  --         width = 30,
+  --         mapping_options = {
+  --           noremap = true,
+  --           nowait = true,
+  --         },
+  --         mappings = {
+  --           ["<space>"] = "toggle_node",
+  --           ["o"]       = "open",
+  --           ["<cr>"]    = "open",
+  --         },
+  --         -- 2) 覆盖 Neo-Tree 窗口默认的 Normal/FloatBorder 等组
+  --         win_options = {
+  --           -- 注意：这里的 key 是 “原始组名”，value 是 “你自定义的新组”
+  --           winhighlight = {
+  --             -- 正常区域
+  --             Normal     = "NeoTreeNormal",
+  --             -- 非焦点状态下的 Normal
+  --             NormalNC   = "NeoTreeNormalNC",
+  --             -- 分隔线
+  --             SignColumn = "NeoTreeSignColumn",
+  --             -- 光标行
+  --             CursorLine = "NeoTreeCursorLine",
+  --             -- 浮窗边框
+  --             FloatBorder= "NeoTreeFloatBorder",
+  --             -- 缩进标记
+  --             EndOfBuffer= "NeoTreeEndOfBuffer",
+  --           },
+  --         },
+  --       },
+  --       filesystem = {
+  --         filtered_items = {
+  --           visible      = true,
+  --           hide_dotfiles= false,
+  --         },
+  --       },
+  --     })
+
+  --     -- 3) 把 Neo-Tree 相关的自定义组 link 到 everforest 的色彩
+  --     local hi = vim.api.nvim_set_hl
+  --     -- 背景透明（随外层窗口）
+  --     hi(0, "NeoTreeNormal",      { bg = "NONE" })
+  --     hi(0, "NeoTreeNormalNC",    { bg = "NONE" })
+  --     -- 分隔线同 everforest 的 VerticalSplit
+  --     hi(0, "NeoTreeSignColumn",  { fg = nil, bg = "NONE" })
+  --     hi(0, "NeoTreeCursorLine",  { bg = "NONE" })
+  --     hi(0, "NeoTreeFloatBorder", { fg = "#5a6357", bg = "NONE" })
+  --     hi(0, "NeoTreeEndOfBuffer", { fg = "#2f333d" })
+
+  --     -- 文件/目录/图标使用 everforest 里已有的组
+  --     vim.cmd([[
+  --       highlight! link NeoTreeRootName       Directory
+  --       highlight! link NeoTreeDirectoryName  Directory
+  --       highlight! link NeoTreeFileName       Normal
+  --       highlight! link NeoTreeFileIcon       Normal
+  --       highlight! link NeoTreeIndentMarker   Comment
+  --       highlight! link NeoTreeGitAdded       DiffAdd
+  --       highlight! link NeoTreeGitModified    DiffChange
+  --       highlight! link NeoTreeGitDeleted     DiffDelete
+  --       highlight! link NeoTreeMessage        WarningMsg
+  --       highlight! link NeoTreeMessageErr     ErrorMsg
+  --       highlight! link NeoTreeErrorVNode     ErrorMsg
+  --       highlight! link NeoTreeDimText        Comment
+  --     ]])
+  --   end,
+  -- },
+
+    -- 状态栏
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+    },
+
+    -- nvim-cmp 自动补全
+    {
+        "hrsh7th/nvim-cmp",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-cmdline",
+        },
+    },
+
+    -- 符号大纲
+    {
+        "simrat39/symbols-outline.nvim",
+        config = function()
+            require("symbols-outline").setup()
+            vim.keymap.set("n", "<leader>e", "<cmd>SymbolsOutline<CR>", { desc = "Toggle Symbols Outline" })
+        end,
+    },
+  -- … 你其他的插件 …
+}
+
+return plugins
+
+-- local plugins = {
+--     -- 主题
+--     {
+--         "sainnhe/everforest",
+--         lazy = false,
+--         priority = 1000,
+--         config = function()
+--             vim.g.everforest_enable_italic = true
+--             vim.cmd.colorscheme("everforest")
+--         end,
+--     },
+
+
+
+--     -- LSP
+--    -- {
+--    --     "neovim/nvim-lspconfig",
+--    --     config = function()
+--    --         require("lspconfig").clangd.setup({})
+--    --     end,
+--    -- },
+
+-- {
+-- "neovim/nvim-lspconfig",
+--   config = function()
+--     require("lspconfig").clangd.setup({
+--       cmd = {
+--         "clangd",
+--         "--background-index",
+--         "--clang-tidy",
+--       },
+--       -- 单文件模式下也生效
+--       single_file_support = true,
+--       init_options = {
+--         -- 如果有 build 目录，仍可指定
+--         compilationDatabaseDirectory = "build",
+--         -- 当找不到 compile_commands.json 时，使用下面的 flags
+--         fallbackFlags = {
+--           "-std=c++17",
+--           "-I../include",        -- 关键：添加你的头文件目录
+--         },
+--       },
+--     })
+--   end,
+-- },
+
+
+--     -- 文件树
+
+
+--     -- plugins.lua
+-- {
+--   "nvim-neo-tree/neo-tree.nvim",
+--   branch = "v3.x",
+--   dependencies = {
+--     "nvim-lua/plenary.nvim",
+--     "nvim-tree/nvim-web-devicons",
+--     "MunifTanjim/nui.nvim",
+--   },
+--   config = function()
+--     -- 1) 启动 Neo-Tree
+--     require("neo-tree").setup({
+--         window = {
+--         width = 30,
+--         mapping_options = {
+--           noremap = true,
+--           nowait = true,
+--         },
+--         mappings = {
+--           ["<space>"] = "toggle_node",
+--           ["o"] = "open",
+--           ["<cr>"] = "open",
+--         },
+--         win_options = {
+--           -- 用 NeoTreeNormal 覆盖默认 Normal
+--           winhighlight = "Normal:NeoTreeNormal,FloatBorder:NeoTreeFloatBorder",
+--         },
+--       },
+--       filesystem = {
+--         filtered_items = {
+--           visible = true,
+--           hide_dotfiles = false,
+--         },
+--       },
+--       -- 你可以在这里进一步配置 icon、indent 等组件
+--     })
+
+--     -- 2) everforest 主题已经被加载过了，这里我们只做高亮链接
+--     --    把 Neo-Tree 用到的主要几个组都 link 到 everforest/默认组
+--     vim.cmd [[
+--       highlight! link NeoTreeNormal           Normal
+--       highlight! link NeoTreeNormalNC         Normal
+--       highlight! link NeoTreeVertSplit        VertSplit
+--       highlight! link NeoTreeWinSeparator     VertSplit
+--       highlight! link NeoTreeFloatBorder      VertSplit
+--       highlight! link NeoTreeRootName         Directory
+--       highlight! link NeoTreeDirectoryName    Directory
+--       highlight! link NeoTreeFileName         Normal
+--       highlight! link NeoTreeFileIcon         Normal
+--       highlight! link NeoTreeIndentMarker     Comment
+--       highlight! link NeoTreeGitAdded         DiffAdd
+--       highlight! link NeoTreeGitModified      DiffChange
+--       highlight! link NeoTreeGitDeleted       DiffDelete
+--       highlight! link NeoTreeCursorLine       CursorLine
+--       highlight! link NeoTreeMessage          WarningMsg
+--       highlight! link NeoTreeMessageErr       ErrorMsg
+--       highlight! link NeoTreeErrorVNode       ErrorMsg
+--       highlight! link NeoTreeDimText          Comment
+--     ]]
+--   end,
+-- },
+
+
+-- }
+
+-- return plugins
+
+-- local plugins = {
+-- 	{
+-- 		'sainnhe/everforest',
+-- 		lazy = false,
+-- 		priority = 1000,
+-- 		config = function()
+-- 			vim.g.everforest_enable_italic = true
+-- 			vim.cmd.colorscheme('everforest')
+-- 		end
+-- 	},
+-- 	{
+-- 		'nvim-lualine/lualine.nvim',
+-- 		dependencies = { 'nvim-tree/nvim-web-devicons' }
+-- 	},
+-- 	  -- nvim-cmp
+-- 	{
+--     		"hrsh7th/nvim-cmp",
+--    		 dependencies = {
+--      			 "hrsh7th/cmp-nvim-lsp",
+--       			"hrsh7th/cmp-buffer",
+--      			 "hrsh7th/cmp-path",
+--      			 "hrsh7th/cmp-cmdline",
+--     		},
+--   	},
+--   	-- LSP
+--   	{
+--     		"neovim/nvim-lspconfig",
+--    		 config = function()
+--      		 require("lspconfig").clangd.setup{
+
+-- 		 }
+--   	  end,
+--   	}
+-- --	{
+-- --		"gauteh/nyan-mode.nvim",
+-- --		config = function()
+-- --		require("nyan-mode").setup()
+-- -- 		end,
+-- --	}
+-- 	-- {
+-- -- 		'MeanderingProgrammer/render-markdown.nvim',
+-- -- 		dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+-- -- 		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+-- -- 		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+-- -- 		---@module 'render-markdown'
+-- -- 		---@type render.md.UserConfig
+-- -- 		opts = {},
+-- -- 	}
+
+-- 	-- 其他插件...
+-- }
+
+-- return plugins
+
